@@ -1,4 +1,4 @@
-# Berka OLAP Dashboard
+# Group 5 MCO1 OLAP Dashboard
 
 Web dashboard over the Berka data warehouse (MySQL star schema: `fact_transaction`, `fact_loan`).
 
