@@ -1,0 +1,9 @@
+{
+  "name": "berka-olap-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OLAP dashboard over the Berka bank data warehouse (MySQL)",
+  "dependencies": {
+    "mysql2": "^3.11.0"
+  }
+}

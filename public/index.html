@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Berka OLAP Dashboard</title>
+<style>
+  :root { --bg:#fbfaf9; --fg:#1f1d1a; --muted:#6b665f; --line:#e4e0da; --accent:#2f6f8f; --panel:#fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#161513; --fg:#ece8e2; --muted:#9a948b; --line:#2e2b27; --accent:#6bb2d1; --panel:#1d1b19; } }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  main { max-width:1000px; margin:0 auto; padding:24px 16px; display:grid; gap:16px; }
+  h1 { margin:0; font-size:24px; font-weight:600; }
+  .status { font-size:13px; color:var(--muted); }
+  .bar { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
+  label { display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--muted); }
+  select, button { font:inherit; padding:6px 8px; border-radius:6px; border:1px solid var(--line); background:var(--bg); color:var(--fg); }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; min-height:300px; }
+  .empty { color:var(--muted); }
+  svg text { fill:var(--muted); font-size:11px; }
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <h1>Berka bank OLAP dashboard</h1>
+    <div class="status" id="status">Checking database…</div>
+  </div>
+
+  <div class="bar">
+    <label>From year <select id="year_from"></select></label>
+    <label>To year <select id="year_to"></select></label>
+    <label>Region <select id="region"><option value="">All regions</option></select></label>
+    <label>Time level
+      <select id="level"><option value="year">Year</option><option value="quarter" selected>Quarter</option><option value="month">Month</option></select>
+    </label>
+  </div>
+
+  <section class="card">
+    <div id="chart"></div>
+    <p class="empty" id="msg"></p>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const REGIONS = ['central Bohemia','east Bohemia','north Bohemia','north Moravia','Prague','south Bohemia','south Moravia','west Bohemia'];
+
+for (let y = 1993; y <= 1998; y++) {
+  $('year_from').add(new Option(y, y));
+  $('year_to').add(new Option(y, y, false, y === 1998));
+}
+REGIONS.forEach((r) => $('region').add(new Option(r, r)));
+
+async function checkHealth() {
+  try {
+    const h = await (await fetch('/api/health')).json();
+    $('status').textContent = 'App running · database: ' + h.database;
+  } catch { $('status').textContent = 'API not reachable'; }
+}
+
+async function load() {
+  const params = new URLSearchParams({
+    year_from: $('year_from').value, year_to: $('year_to').value,
+    region: $('region').value, level: $('level').value,
+  });
+  if (!params.get('region')) params.delete('region');
+  $('chart').replaceChildren();
+  $('msg').textContent = 'Loading…';
+  const res = await fetch('/api/net-flow?' + params);
+  const body = await res.json();
+  if (!res.ok) { $('msg').textContent = body.error || 'Something went wrong'; return; }
+  $('msg').textContent = body.rows.length ? body.rows.length + ' periods · query took ' + body.ms + ' ms' : 'No rows for these filters.';
+  draw(body.rows);
+}
+
+function draw(rows) {
+  const W = Math.max(320, $('chart').clientWidth), H = 280, m = { t: 10, r: 10, b: 30, l: 60 };
+  const svg = d3.select('#chart').append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('width', '100%');
+  const x = d3.scaleBand(rows.map((r) => r.period), [m.l, W - m.r]).padding(0.2);
+  const y = d3.scaleLinear([0, d3.max(rows, (r) => +r.net_flow) || 1], [H - m.b, m.t]).nice();
+  svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', m.l - 6).attr('y', y).attr('text-anchor', 'end').attr('dy', '0.32em')
+    .text((d) => d3.format('.2s')(d));
+  const step = Math.ceil(rows.length / 12);
+  svg.append('g').selectAll('text').data(rows.filter((_, i) => i % step === 0)).join('text')
+    .attr('x', (r) => x(r.period) + x.bandwidth() / 2).attr('y', H - 10).attr('text-anchor', 'middle').text((r) => r.period);
+  svg.append('g').selectAll('rect').data(rows).join('rect')
+    .attr('x', (r) => x(r.period)).attr('width', x.bandwidth())
+    .attr('y', (r) => y(+r.net_flow)).attr('height', (r) => y(0) - y(+r.net_flow))
+    .attr('rx', 3).attr('fill', 'var(--accent)');
+}
+
+['year_from', 'year_to', 'region', 'level'].forEach((id) => $(id).addEventListener('change', () => {
+  if (+$('year_from').value > +$('year_to').value) {
+    if (id === 'year_from') $('year_to').value = $('year_from').value; else $('year_from').value = $('year_to').value;
+  }
+  load();
+}));
+
+checkHealth();
+load();
+</script>
+</body>
+</html>
