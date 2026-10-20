@@ -11,6 +11,12 @@ from decimal import Decimal, ROUND_HALF_UP
 
 sys.dont_write_bytecode = True
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from etl_config import load_env_file
+
+load_env_file()
+
+
 def _env(name, default):
     return os.environ.get(name, default)
 

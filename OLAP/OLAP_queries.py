@@ -11,6 +11,12 @@ import os
 import time
 from decimal import Decimal
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from etl_config import load_env_file
+
+load_env_file()
+
+
 def _env(name, default):
     return os.environ.get(name, default)
 

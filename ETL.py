@@ -7,6 +7,11 @@ import sys
 import time
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
+from etl_config import load_env_file
+
+load_env_file()
+
+
 def _env(name, default):
     return os.environ.get(name, default)
 
