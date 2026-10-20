@@ -4,3 +4,4 @@ node_modules
 .vercel
 etl_rejects.log
 etl_run.log
+functional_test_log.csv
