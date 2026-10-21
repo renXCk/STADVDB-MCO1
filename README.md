@@ -1,10 +1,12 @@
 # Group 5 MCO1 OLAP Dashboard
 
-Web dashboard over the Berka data warehouse (MySQL star schema: `fact_transaction`, `fact_loan`).
+Web dashboard over the bank data warehouse (MySQL star schema: `fact_transaction`, `fact_loan`).
 
-- `public/` static page (filters + D3 chart)
-- `api/` serverless endpoints, one parameterized query each
-- `lib/db.js` MySQL pool (config from environment variables)
+- `public/` static page (vanilla JS, Apache ECharts): KPI tiles, filters and one card per OLAP report
+- `api/` serverless endpoints, one parameterized report each (`r1-cash-flow` … `r7-region-profile`, plus `regions` and `health`)
+- `lib/db.js` MySQL pool (config from environment variables), `lib/report.js` shared endpoint plumbing,
+  `lib/demo-data.js` sample data used when no database is configured
+- `scripts/check-endpoints.js` compares the endpoints with `olap_results/*.csv` (`npm run check`)
 
 ## Build the warehouse and run the OLAP reports
 
@@ -108,7 +110,39 @@ npm install
 npm start
 ```
 Open http://localhost:3000. Needs Node 22 or newer (`node --version`).
-Copy `.env.example` to `.env.local` and fill it in once a database is reachable. Without it the page loads and says the database is not connected.
+Copy `.env.example` to `.env.local` and fill it in once a database is reachable. Without it every endpoint
+returns sample data and the page shows a "Demo data" badge, so the whole UI can be tried without MySQL.
+
+### Report endpoints
+
+Each report's SQL sits in one constant at the top of its file (R1–R4 from `OLAP/OLAP_queries_optimized.py`,
+R5–R7 from `OLAP/OLAP_queries.py`), with `:name` placeholders. To swap in an optimized query, replace that
+constant and keep the placeholders and output column names; the JSON response is rebuilt in a fixed column
+order, so the front end does not change.
+
+| Endpoint | Report | Parameters |
+|---|---|---|
+| `/api/r1-cash-flow` | R1 cash flow trend | `level` (year/quarter/month/day), `date_from`, `date_to`, `region` |
+| `/api/r2-regional` | R2 regional roll-up | `year_from`, `year_to`, `txn_type` (Credit/Debit), `region` |
+| `/api/r3-operation-pivot` | R3 operations by year | `measure` (amount/count), `txn_type`, `region` |
+| `/api/r4-loan-portfolio` | R4 loan portfolio | `group_by` (region/status/duration/year), `phase`, `health`, `region`, `year_from`, `year_to`, `duration` |
+| `/api/r5-top-accounts` | R5 top accounts | `region`, `year`, `top_n` |
+| `/api/r6-transaction-mix` | R6 transaction mix | `year`, `region`, `txn_type` |
+| `/api/r7-region-profile` | R7 region profile | `year_from`, `year_to`, `region` |
+
+Every response is `{ report, params, columns, rows, ms, source }`, where `source` is `db` or `demo`.
+
+### Check the endpoints against the report CSVs
+
+With the server running and `.env.local` set:
+
+```
+npm run check
+```
+
+It calls every endpoint with the example parameters from `OLAP/OLAP_queries.py`, compares the rows with
+`olap_results/*.csv`, checks the control totals (1,056,320 transactions, net cash flow 197,151,288.70,
+682 loans, 103,261,740.00 loaned) and prints PASS or FAIL per check. Set `BASE_URL` to check another server.
 
 ## Deploy
 Push to GitHub, import the repo at vercel.com/new, leave all build settings empty, click Deploy.

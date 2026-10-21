@@ -4,95 +4,350 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Group 5 MCO1 OLAP Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<main>
-  <div>
-    <h1>Group 5 MCO1 OLAP dashboard</h1>
-    <div class="status" id="status">Checking database…</div>
+<div class="page">
+
+  <header class="top">
+    <div class="title-block">
+      <h1>Group 5 MCO1<br>OLAP Dashboard</h1>
+      <p class="subtitle">Where the bank's money comes from, where it goes, and how its loans are doing.</p>
+    </div>
+    <form class="filters" id="filters" aria-label="Global filters (slice and dice)">
+      <label class="pill-select"><span>From year</span><select id="f-year-from"></select></label>
+      <label class="pill-select"><span>To year</span><select id="f-year-to"></select></label>
+      <label class="pill-select"><span>Region</span><select id="f-region"><option value="">All regions</option></select></label>
+      <label class="pill-select"><span>Time level</span>
+        <select id="f-level">
+          <option value="year">Year</option>
+          <option value="quarter">Quarter</option>
+          <option value="month" selected>Month</option>
+          <option value="day">Day</option>
+        </select>
+      </label>
+      <label class="pill-select"><span>Transaction type</span>
+        <select id="f-type">
+          <option value="">All types</option>
+          <option value="Credit">Credit</option>
+          <option value="Debit">Debit</option>
+        </select>
+      </label>
+      <button type="reset" class="pill-btn" id="f-reset">Reset</button>
+    </form>
+  </header>
+
+  <div class="subbar">
+    <nav class="seg tabs" aria-label="Dashboard sections">
+      <button type="button" class="active" aria-pressed="true" data-tab="transactions"><i data-lucide="arrow-left-right"></i>Transactions</button>
+      <button type="button" aria-pressed="false" data-tab="loans"><i data-lucide="landmark"></i>Loans</button>
+      <button type="button" aria-pressed="false" data-tab="cross"><i data-lucide="git-merge"></i>Cross-fact</button>
+    </nav>
+    <div class="status">
+      <span class="badge-demo" id="demo-badge" hidden title="The database is not connected. Every number on this page is sample data.">
+        <i data-lucide="flask-conical"></i>Demo data
+      </span>
+      <span class="db-status" id="db-status">Checking database…</span>
+    </div>
   </div>
 
-  <nav class="tabs" aria-label="Dashboard navigation">
-    <button type="button" class="tab-btn active" data-tab="transactions">
-      <i data-lucide="arrow-left-right"></i>
-      <span>Transactions</span>
-    </button>
-
-    <button type="button" class="tab-btn" data-tab="loans">
-      <i data-lucide="wallet"></i>
-      <span>Loans</span>
-    </button>
-
-    <button type="button" class="tab-btn" data-tab="cross-fact">
-      <i data-lucide="chart-no-axes-combined"></i>
-      <span>Cross-Fact</span>
-    </button>
-  </nav>
-
-  <div id="transactions-panel" class="tab-panel">
-    <section class="kpi-grid">
-      <div class="kpi-card">
-        <h3>Transaction Count</h3>
-        <div class="kpi-value" id="total-transactions">—</div>
-      </div>
-
-      <div class="kpi-card">
-        <h3>Total Transaction Amount</h3>
-        <div class="kpi-value" id="total-amount">—</div>
-      </div>
-
-      <div class="kpi-card">
-        <h3>Net Flow</h3>
-        <div class="kpi-value" id="net-flow">—</div>
-      </div>
+  <!-- ============================== TRANSACTIONS ============================== -->
+  <main class="panel" id="panel-transactions" data-panel="transactions">
+    <section class="kpis" aria-label="Transaction totals">
+      <article class="card kpi" id="kpi-txn" data-state="loading">
+        <div class="kpi-head"><h3>Transactions</h3><i data-lucide="arrow-left-right" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-amount" data-state="loading">
+        <div class="kpi-head"><h3>Total amount moved</h3><i data-lucide="coins" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-net" data-state="loading">
+        <div class="kpi-head"><h3>Net cash flow</h3><i data-lucide="trending-up" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-accounts" data-state="loading">
+        <div class="kpi-head"><h3>Active accounts</h3><i data-lucide="users" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
     </section>
-  </div>
 
-  <div class="bar">
-    <label>From year <select id="year_from"></select></label>
-    <label>To year <select id="year_to"></select></label>
-    <label>Region <select id="region"><option value="">All regions</option></select></label>
-    <label>Time level
-      <select id="level"><option value="year">Year</option><option value="quarter" selected>Quarter</option><option value="month">Month</option></select>
-    </label>
-  </div>
+    <div class="grid">
+      <section class="card span-8" id="card-r2" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Regional roll-up</h2>
+            <p class="q">Which regions, and which districts inside them, move the most money?</p>
+          </div>
+          <div class="tools">
+            <div class="seg" data-control="r2-measure" aria-label="Measure">
+              <button type="button" data-value="total_amount" class="active" aria-pressed="true">Amount</button>
+              <button type="button" data-value="net_cash_flow" aria-pressed="false">Net</button>
+              <button type="button" data-value="txn_count" aria-pressed="false">Count</button>
+              <button type="button" data-value="amount_per_account" aria-pressed="false">Per account</button>
+            </div>
+          </div>
+        </header>
+        <div class="ops" data-ops="Roll-up,Drill-down,Slice: type,Dice: years"></div>
+        <div class="crumbs">
+          <nav class="crumb-path" id="r2-crumbs" aria-label="Drill path"></nav>
+          <button type="button" class="mini-btn" id="r2-rollup" disabled><i data-lucide="corner-left-up"></i>Roll up</button>
+        </div>
+        <div class="body"><div class="chart tall" id="r2-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="totals-wrap" id="r2-totals"></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r2-insight"></p></div>
+      </section>
 
-  <div class="chart-grid">
-    <section class="card">
-      <h3>Transaction Amount Trends (Demo)</h3>
-      
-      <button id="rollup-btn" type="button">
-        ↑ Roll Up
-      </button>
+      <section class="card span-4" id="card-r5" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Top accounts</h2>
+            <p class="q">Which accounts bring in the most net money in a region?</p>
+          </div>
+        </header>
+        <div class="tools tools-row">
+          <label class="pill-select small"><span>Region</span><select id="r5-region"></select></label>
+          <label class="pill-select small"><span>Year</span><select id="r5-year"></select></label>
+          <div class="seg small" data-control="r5-top" aria-label="Top N">
+            <button type="button" data-value="3" aria-pressed="false">Top 3</button>
+            <button type="button" data-value="5" class="active" aria-pressed="true">Top 5</button>
+            <button type="button" data-value="10" aria-pressed="false">Top 10</button>
+          </div>
+        </div>
+        <div class="ops" data-ops="Drill-down: account,Slice: year,Dice: region + top-N"></div>
+        <div class="body"><div class="rank-list" id="r5-list"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r5-insight"></p></div>
+      </section>
 
-      <div id="echarts-demo" style="width:100%; height:300px;"></div>
+      <section class="card span-7" id="card-r1" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Cash flow trend</h2>
+            <p class="q">Do customers put in more money than they take out, and when does that flip?</p>
+          </div>
+          <div class="tools">
+            <button type="button" class="mini-btn" id="r1-rollup"><i data-lucide="zoom-out"></i>Roll up</button>
+            <button type="button" class="mini-btn" id="r1-drill"><i data-lucide="zoom-in"></i>Drill down</button>
+          </div>
+        </header>
+        <div class="ops" data-ops="Roll-up,Drill-down,Slice: region,Dice: date range"></div>
+        <div class="crumbs"><nav class="crumb-path" id="r1-crumbs" aria-label="Drill path"></nav><span class="hint">Click a point to drill into it</span></div>
+        <div class="body"><div class="chart" id="r1-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r1-insight"></p></div>
+      </section>
+
+      <section class="card span-5" id="card-r3" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Operations by year</h2>
+            <p class="q">Which banking operations grow or shrink year over year?</p>
+          </div>
+          <div class="tools">
+            <div class="seg" data-control="r3-measure" aria-label="Measure">
+              <button type="button" data-value="amount" class="active" aria-pressed="true">Amount</button>
+              <button type="button" data-value="count" aria-pressed="false">Count</button>
+            </div>
+            <button type="button" class="mini-btn" id="r3-swap" aria-pressed="false"><i data-lucide="arrow-down-up"></i>Pivot</button>
+          </div>
+        </header>
+        <div class="ops" data-ops="Pivot,Roll-up: total row,Slice: type,Dice: region"></div>
+        <div class="body"><div class="chart" id="r3-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <p class="note" id="r3-note"></p>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r3-insight"></p></div>
+      </section>
+
+      <section class="card span-5" id="card-r6" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Transaction mix</h2>
+            <p class="q">What are the money moves made of: type, operation and purpose?</p>
+          </div>
+          <div class="tools">
+            <label class="pill-select small"><span>Year</span><select id="r6-year"></select></label>
+            <div class="seg" data-control="r6-measure" aria-label="Measure">
+              <button type="button" data-value="total_amount" class="active" aria-pressed="true">Amount</button>
+              <button type="button" data-value="txn_count" aria-pressed="false">Count</button>
+            </div>
+          </div>
+        </header>
+        <div class="ops" data-ops="Drill-down: click a ring,Roll-up: click the centre,Slice: year + type,Dice: region"></div>
+        <div class="body"><div class="chart" id="r6-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r6-insight"></p></div>
+      </section>
+
+      <section class="card span-7" id="card-net" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Net flow per period</h2>
+            <p class="q">Which periods lost money and which gained it?</p>
+          </div>
+        </header>
+        <div class="ops" data-ops="Follows the cash flow drill path,Slice: region"></div>
+        <div class="body"><div class="chart" id="net-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="net-insight"></p></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ================================= LOANS ================================== -->
+  <main class="panel" id="panel-loans" data-panel="loans" hidden>
+    <section class="kpis" aria-label="Loan totals">
+      <article class="card kpi" id="kpi-loans" data-state="loading">
+        <div class="kpi-head"><h3>Loans granted</h3><i data-lucide="file-signature" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-loan-amount" data-state="loading">
+        <div class="kpi-head"><h3>Total loan amount</h3><i data-lucide="hand-coins" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-problem" data-state="loading">
+        <div class="kpi-head"><h3>Problem rate</h3><i data-lucide="triangle-alert" class="kpi-icon warn"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-avg-loan" data-state="loading">
+        <div class="kpi-head"><h3>Average loan</h3><i data-lucide="calculator" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
     </section>
 
-    <section class="card">
-      <h3>Transactions by Operation (Demo)</h3>
-      <div id="operation-chart" class="chart-area"></div>
+    <div class="grid">
+      <section class="card span-8" id="card-r4" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Loan portfolio</h2>
+            <p class="q">Where is loan money concentrated, and where are the repayment problems?</p>
+          </div>
+          <div class="tools">
+            <div class="seg" data-control="r4-group" aria-label="Group by">
+              <button type="button" data-value="region" class="active" aria-pressed="true">Region</button>
+              <button type="button" data-value="status" aria-pressed="false">Status</button>
+              <button type="button" data-value="duration" aria-pressed="false">Term</button>
+              <button type="button" data-value="year" aria-pressed="false">Year</button>
+            </div>
+          </div>
+        </header>
+        <div class="tools tools-row">
+          <div class="seg small" data-control="r4-phase" aria-label="Contract phase">
+            <button type="button" data-value="" class="active" aria-pressed="true">All phases</button>
+            <button type="button" data-value="Finished" aria-pressed="false">Finished</button>
+            <button type="button" data-value="Running" aria-pressed="false">Running</button>
+          </div>
+          <div class="seg small" data-control="r4-health" aria-label="Payment health">
+            <button type="button" data-value="" class="active" aria-pressed="true">Any health</button>
+            <button type="button" data-value="Good" aria-pressed="false">Good</button>
+            <button type="button" data-value="Bad" aria-pressed="false">Bad</button>
+          </div>
+          <label class="pill-select small"><span>Term</span>
+            <select id="r4-duration">
+              <option value="">All terms</option>
+              <option value="12">12 months</option>
+              <option value="24">24 months</option>
+              <option value="36">36 months</option>
+              <option value="48">48 months</option>
+              <option value="60">60 months</option>
+            </select>
+          </label>
+        </div>
+        <div class="ops" data-ops="Roll-up / drill-down: group by,Slice: phase + health + term,Dice: grant years + region"></div>
+        <div class="body"><div class="chart tall" id="r4-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r4-insight"></p></div>
+      </section>
+
+      <section class="card span-4" id="card-r4-share" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Share of loan money</h2>
+            <p class="q">How is the loan amount split across the same groups?</p>
+          </div>
+        </header>
+        <div class="ops" data-ops="Same slice as the portfolio"></div>
+        <div class="body"><div class="chart tall" id="r4-share-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r4-share-insight"></p></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- =============================== CROSS-FACT =============================== -->
+  <main class="panel" id="panel-cross" data-panel="cross" hidden>
+    <section class="kpis" aria-label="Region profile totals">
+      <article class="card kpi" id="kpi-x-accounts" data-state="loading">
+        <div class="kpi-head"><h3>Accounts</h3><i data-lucide="users" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-x-net" data-state="loading">
+        <div class="kpi-head"><h3>Net flow per account</h3><i data-lucide="wallet" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-x-loans" data-state="loading">
+        <div class="kpi-head"><h3>Loans per 100 accounts</h3><i data-lucide="landmark" class="kpi-icon"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
+      <article class="card kpi" id="kpi-x-problem" data-state="loading">
+        <div class="kpi-head"><h3>Problem loans</h3><i data-lucide="triangle-alert" class="kpi-icon warn"></i></div>
+        <div class="kpi-value" data-kpi-value>—</div>
+        <div class="kpi-delta" data-kpi-delta></div>
+        <div class="kpi-spark" data-kpi-spark></div>
+      </article>
     </section>
-  </div>
-  
-  </div> <!-- End of Transactions panel -->
 
-  <section id="loans-panel" class="card tab-panel" hidden>
-    <h2>Loan Analytics</h2>
-    <p class="empty">Loan analytics dashboard coming soon.</p>
-  </section>
+    <div class="grid">
+      <section class="card span-12" id="card-r7" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Region profile: deposits vs borrowing</h2>
+            <p class="q">Do regions whose accounts bring in more money also borrow more, and repay worse?</p>
+          </div>
+          <span class="drill-across" title="Transactions and loans are aggregated separately, then joined through the shared region dimension.">
+            <i data-lucide="git-merge"></i>Drill-across: transactions + loans by region
+          </span>
+        </header>
+        <div class="ops" data-ops="Drill-across,Slice: region,Dice: years"></div>
+        <div class="body"><div class="chart tall" id="r7-chart"></div><div class="skeleton"></div><div class="msg"></div></div>
+        <div class="insight"><i data-lucide="lightbulb"></i><p id="r7-insight"></p></div>
+      </section>
 
-  <section id="cross-fact-panel" class="card tab-panel" hidden>
-    <h2>Cross-Fact Analytics</h2>
-    <p class="empty">Combined transaction and loan analysis coming soon.</p>
-  </section>
+      <section class="card span-12" id="card-r7-table" data-state="loading">
+        <header class="card-head">
+          <div>
+            <h2>Region profile table</h2>
+            <p class="q">The same numbers side by side. Click a column to sort.</p>
+          </div>
+        </header>
+        <div class="body"><div class="table-wrap" id="r7-table"></div><div class="skeleton"></div><div class="msg"></div></div>
+      </section>
+    </div>
+  </main>
 
-</main>
+  <footer class="foot">Group 5 · STADVDB MCO1 · Reports R1–R7 from the OLAP query set · Charts by Apache ECharts</footer>
+</div>
 
-<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
-<script>lucide.createIcons();</script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
 <script src="/app.js"></script>
-
 </body>
 </html>
