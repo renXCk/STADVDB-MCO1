@@ -1,0 +1,21 @@
+label,report,run,ms,rows,parameters,timestamp
+optimized3,R2_regional_rollup,1,712.30,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,2,590.42,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,3,537.54,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,4,569.06,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,5,587.79,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,6,561.32,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,7,570.28,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,8,560.48,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,9,535.18,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R2_regional_rollup,10,555.62,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:16:32
+optimized3,R3_operation_by_year_pivot,1,938.35,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,2,896.27,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,3,901.39,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,4,898.98,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,5,903.59,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,6,900.41,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,7,902.66,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,8,899.91,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,9,942.51,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43
+optimized3,R3_operation_by_year_pivot,10,894.96,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:16:43

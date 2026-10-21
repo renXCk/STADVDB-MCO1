@@ -1,0 +1,41 @@
+label,report,run,ms,rows,parameters,timestamp
+final,R1_cash_flow_trend,1,272.33,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,2,230.12,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,3,285.38,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,4,286.16,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,5,289.78,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,6,283.60,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,7,305.94,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,8,295.45,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,9,292.98,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R1_cash_flow_trend,10,293.70,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 17:34:09
+final,R2_regional_rollup,1,578.75,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,2,572.16,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,3,555.77,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,4,669.57,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,5,578.66,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,6,565.75,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,7,555.40,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,8,532.86,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,9,533.25,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R2_regional_rollup,10,571.28,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 17:34:15
+final,R3_operation_by_year_pivot,1,885.24,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,2,886.11,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,3,914.61,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,4,925.05,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,5,869.53,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,6,903.44,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,7,891.69,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,8,933.08,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,9,959.61,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R3_operation_by_year_pivot,10,876.19,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 17:34:26
+final,R4_loan_portfolio,1,5.29,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,2,5.55,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,3,7.75,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,4,6.89,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,5,6.72,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,6,5.56,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,7,5.98,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,8,6.85,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,9,8.80,8,"{""group_by"": ""region""}",2026-10-21 17:34:28
+final,R4_loan_portfolio,10,5.17,8,"{""group_by"": ""region""}",2026-10-21 17:34:28

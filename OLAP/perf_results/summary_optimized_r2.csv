@@ -1,0 +1,2 @@
+report,runs,min_ms,median_ms,mean_ms,max_ms,rows,status
+R2_regional_rollup,10,2175.30,2504.36,2484.83,2598.52,85,ok

@@ -1,0 +1,33 @@
+2026-10-21 01:26:34,717 INFO OLAP run started. Warehouse database: mco1_schema. Reports: R1_cash_flow_trend, R2_regional_rollup, R3_operation_by_year_pivot, R4_loan_portfolio, R5_top_accounts_by_region, R6_transaction_mix, R7_region_profile_drill_across.
+2026-10-21 01:26:34,962 INFO Warehouse schema check passed (6 tables).
+2026-10-21 01:26:34,963 INFO ---- R1_cash_flow_trend: Cash flow trend by period
+2026-10-21 01:26:34,964 INFO parameters: {"level": "month", "date_from": "1997-01-01", "date_to": "1997-12-31"}
+2026-10-21 01:26:39,047 INFO R1_cash_flow_trend: 12 rows written to olap_results\R1_cash_flow_trend.csv (4.1 seconds).
+2026-10-21 01:26:39,048 INFO ---- R2_regional_rollup: Regional activity with district drill-down and subtotals
+2026-10-21 01:26:39,049 INFO parameters: {"year_from": 1996, "year_to": 1998, "txn_type": "Credit"}
+2026-10-21 01:26:49,888 INFO R2_regional_rollup: 85 rows written to olap_results\R2_regional_rollup.csv (10.8 seconds).
+2026-10-21 01:26:49,889 INFO ---- R3_operation_by_year_pivot: Pivot of transaction operations by year
+2026-10-21 01:26:49,889 INFO parameters: {"measure": "amount", "txn_type": "Debit"}
+2026-10-21 01:26:57,145 INFO R3_operation_by_year_pivot: 4 rows written to olap_results\R3_operation_by_year_pivot.csv (7.3 seconds).
+2026-10-21 01:26:57,146 INFO ---- R4_loan_portfolio: Loan portfolio by a chosen dimension
+2026-10-21 01:26:57,146 INFO parameters: {"group_by": "region"}
+2026-10-21 01:26:57,164 INFO R4_loan_portfolio: 8 rows written to olap_results\R4_loan_portfolio.csv (0.0 seconds).
+2026-10-21 01:26:57,164 INFO ---- R5_top_accounts_by_region: Top accounts by net cash flow inside each region
+2026-10-21 01:26:57,165 INFO parameters: {"region": "Prague", "year": 1998, "top_n": 5}
+2026-10-21 01:26:58,600 INFO R5_top_accounts_by_region: 5 rows written to olap_results\R5_top_accounts_by_region.csv (1.4 seconds).
+2026-10-21 01:26:58,601 INFO ---- R6_transaction_mix: Transaction mix: type, operation and purpose with subtotals
+2026-10-21 01:26:58,601 INFO parameters: {"year": 1997}
+2026-10-21 01:27:04,002 INFO R6_transaction_mix: 23 rows written to olap_results\R6_transaction_mix.csv (5.4 seconds).
+2026-10-21 01:27:04,002 INFO ---- R7_region_profile_drill_across: Region profile: accounts, cash flow and loans side by side
+2026-10-21 01:27:04,002 INFO parameters: {"year_from": 1996, "year_to": 1998}
+2026-10-21 01:27:12,421 INFO R7_region_profile_drill_across: 8 rows written to olap_results\R7_region_profile_drill_across.csv (8.4 seconds).
+2026-10-21 01:27:12,422 INFO ---- Run summary ----
+2026-10-21 01:27:12,422 INFO R1_cash_flow_trend                 rows 12
+2026-10-21 01:27:12,422 INFO R2_regional_rollup                 rows 85
+2026-10-21 01:27:12,422 INFO R3_operation_by_year_pivot         rows 4
+2026-10-21 01:27:12,422 INFO R4_loan_portfolio                  rows 8
+2026-10-21 01:27:12,423 INFO R5_top_accounts_by_region          rows 5
+2026-10-21 01:27:12,423 INFO R6_transaction_mix                 rows 23
+2026-10-21 01:27:12,423 INFO R7_region_profile_drill_across     rows 8
+2026-10-21 01:27:12,424 INFO Elapsed: 37.7 seconds.
+2026-10-21 01:27:12,424 INFO OLAP run finished: 7 report(s) written to olap_results.

@@ -1,0 +1,6 @@
+region,rank_in_region,account_id,district_name,frequency,txn_count,total_credit,total_debit,net_cash_flow
+Prague,1,2598,Hl.m. Praha,Monthly,87,804309.50,700460.60,103848.90
+Prague,2,2092,Hl.m. Praha,Monthly,81,682401.40,592152.60,90248.80
+Prague,3,5213,Hl.m. Praha,Monthly,93,626115.20,547682.60,78432.60
+Prague,4,699,Hl.m. Praha,Monthly,69,580743.00,505060.60,75682.40
+Prague,5,7465,Hl.m. Praha,Weekly,75,256482.80,184150.40,72332.40

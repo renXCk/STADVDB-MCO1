@@ -1,0 +1,11 @@
+label,report,run,ms,rows,parameters,timestamp
+optimized_r2,R2_regional_rollup,1,2498.78,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,2,2414.84,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,3,2570.00,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,4,2498.37,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,5,2548.66,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,6,2175.30,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,7,2481.61,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,8,2509.94,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,9,2552.31,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43
+optimized_r2,R2_regional_rollup,10,2598.52,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 16:19:43

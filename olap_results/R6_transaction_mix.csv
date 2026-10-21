@@ -1,0 +1,24 @@
+txn_type,operation,purpose,row_level,txn_count,total_amount,avg_amount
+Credit,Collection from Another Bank,Old-age Pension Payment,detail,7956,43925865.00,5521.10
+Credit,Collection from Another Bank,Regular Transaction,detail,9306,163414061.00,17560.08
+Credit,Collection from Another Bank,ALL PURPOSES,operation subtotal,17262,207339926.00,12011.35
+Credit,Credit in Cash,Regular Transaction,detail,41628,649979503.00,15614.00
+Credit,Credit in Cash,ALL PURPOSES,operation subtotal,41628,649979503.00,15614.00
+Credit,N/A,Interest Credited,detail,48788,7372897.70,151.12
+Credit,N/A,ALL PURPOSES,operation subtotal,48788,7372897.70,151.12
+Credit,ALL OPERATIONS,,type subtotal,107678,864692326.70,8030.35
+Debit,Credit Card Withdrawal,Regular Transaction,detail,2166,4930300.00,2276.22
+Debit,Credit Card Withdrawal,ALL PURPOSES,operation subtotal,2166,4930300.00,2276.22
+Debit,Remittance to Another Bank,Household Payment,detail,31289,129387640.00,4135.24
+Debit,Remittance to Another Bank,Insurance Payment,detail,4931,6371203.00,1292.07
+Debit,Remittance to Another Bank,Loan Payment,detail,3615,14854413.20,4109.10
+Debit,Remittance to Another Bank,Regular Transaction,detail,16435,31830567.00,1936.75
+Debit,Remittance to Another Bank,ALL PURPOSES,operation subtotal,56270,182443823.20,3242.29
+Debit,Withdrawal in Cash,Household Payment,detail,720,5957200.00,8273.89
+Debit,Withdrawal in Cash,Insurance Payment,detail,11,11600.00,1054.55
+Debit,Withdrawal in Cash,Payment of Statement,detail,43151,743714.00,17.24
+Debit,Withdrawal in Cash,Regular Transaction,detail,74006,629543224.00,8506.65
+Debit,Withdrawal in Cash,Sanction Interest if Negative Balance,detail,407,6823.20,16.76
+Debit,Withdrawal in Cash,ALL PURPOSES,operation subtotal,118295,636262561.20,5378.61
+Debit,ALL OPERATIONS,,type subtotal,176731,823636684.40,4660.40
+ALL TYPES,,,grand total,284409,1688329011.10,5936.27

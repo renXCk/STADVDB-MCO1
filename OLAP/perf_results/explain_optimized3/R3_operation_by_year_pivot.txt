@@ -1,0 +1,52 @@
+R3_operation_by_year_pivot  (label: optimized3, 2026-10-21 17:16:43)
+parameters: {"measure": "amount", "txn_type": "Debit"}
+
+==============================================================================
+EXPLAIN (table form)
+==============================================================================
+id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra
+1 | PRIMARY | t |  | index | PRIMARY,uq_txn_type | uq_txn_type | 486 |  | 14 | 100.0 | Using index; Using temporary; Using filesort
+1 | PRIMARY | <derived3> |  | ref | <auto_key0> | <auto_key0> | 4 | mco1_schema.t.txn_type_key | 8096 | 100.0 | 
+1 | PRIMARY | d |  | eq_ref | PRIMARY | PRIMARY | 4 | x.date_key | 1 | 100.0 | 
+3 | DERIVED | t |  | ref | PRIMARY,uq_txn_type | uq_txn_type | 82 | const | 10 | 100.0 | Using index; Using temporary
+3 | DERIVED | f |  | ref | idx_ft_type,idx_ft_date_cover,idx_ft_type_cover | idx_ft_type_cover | 4 | mco1_schema.t.txn_type_key | 80952 | 100.0 | Using index
+
+==============================================================================
+EXPLAIN FORMAT=TREE
+==============================================================================
+-> Sort: grouping(rollup_group_item(t.operation,0)), operation
+    -> Stream results  (cost=56674 rows=0)
+        -> Group aggregate with rollup: sum((case when (d.year_num = 1993) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1994) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1995) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1996) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1997) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1998) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when ('amount' = 'count') then x.n_txn else x.amount_sum end))  (cost=56674 rows=0)
+            -> Nested loop inner join  (cost=56674 rows=0)
+                -> Nested loop inner join  (cost=28338 rows=0)
+                    -> Sort: operation  (cost=2.4 rows=14)
+                        -> Index scan on t using uq_txn_type  (cost=2.4 rows=14)
+                    -> Index lookup on x using <auto_key0> (txn_type_key=t.txn_type_key)  (cost=0.257..2082 rows=8096)
+                        -> Materialize CTE daily  (cost=0..0 rows=0)
+                            -> Table scan on <temporary>
+                                -> Aggregate using temporary table
+                                    -> Nested loop inner join  (cost=84322 rows=809529)
+                                        -> Covering index lookup on t using uq_txn_type (txn_type='Debit')  (cost=1.38 rows=10)
+                                        -> Covering index lookup on f using idx_ft_type_cover (txn_type_key=t.txn_type_key)  (cost=1146 rows=80953)
+                -> Single-row index lookup on d using PRIMARY (date_key=x.date_key)  (cost=0.25 rows=1)
+
+
+==============================================================================
+EXPLAIN ANALYZE (actually runs the query)
+==============================================================================
+-> Sort: `grouping(rollup_group_item(t.operation,0))`, operation  (actual time=1163..1163 rows=4 loops=1)
+    -> Stream results  (cost=56674 rows=0) (actual time=1132..1163 rows=4 loops=1)
+        -> Group aggregate with rollup: sum((case when (d.year_num = 1993) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1994) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1995) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1996) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1997) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when (d.year_num = 1998) then (case when ('amount' = 'count') then x.n_txn else x.amount_sum end) else 0 end)), sum((case when ('amount' = 'count') then x.n_txn else x.amount_sum end))  (cost=56674 rows=0) (actual time=1132..1163 rows=4 loops=1)
+            -> Nested loop inner join  (cost=56674 rows=0) (actual time=1125..1142 rows=6891 loops=1)
+                -> Nested loop inner join  (cost=28338 rows=0) (actual time=1125..1128 rows=6891 loops=1)
+                    -> Sort: operation  (cost=2.4 rows=14) (actual time=0.0342..0.0454 rows=14 loops=1)
+                        -> Index scan on t using uq_txn_type  (cost=2.4 rows=14) (actual time=0.015..0.02 rows=14 loops=1)
+                    -> Index lookup on x using <auto_key0> (txn_type_key=t.txn_type_key)  (cost=0.257..2082 rows=8096) (actual time=80.3..80.5 rows=492 loops=14)
+                        -> Materialize CTE daily  (cost=0..0 rows=0) (actual time=1124..1124 rows=6891 loops=1)
+                            -> Table scan on <temporary>  (actual time=1106..1107 rows=6891 loops=1)
+                                -> Aggregate using temporary table  (actual time=1106..1106 rows=6891 loops=1)
+                                    -> Nested loop inner join  (cost=84322 rows=809529) (actual time=0.726..482 rows=651237 loops=1)
+                                        -> Covering index lookup on t using uq_txn_type (txn_type='Debit')  (cost=1.38 rows=10) (actual time=0.007..0.0348 rows=10 loops=1)
+                                        -> Covering index lookup on f using idx_ft_type_cover (txn_type_key=t.txn_type_key)  (cost=1146 rows=80953) (actual time=1.57..41.2 rows=65124 loops=10)
+                -> Single-row index lookup on d using PRIMARY (date_key=x.date_key)  (cost=0.25 rows=1) (actual time=0.00174..0.00179 rows=1 loops=6891)
+
