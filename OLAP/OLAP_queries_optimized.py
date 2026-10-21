@@ -222,11 +222,215 @@ GROUP BY grp
 ORDER BY grp
 """
 
+SQL_R5 = """
+WITH account_totals AS (
+    SELECT
+        a.region,
+        a.district_name,
+        a.account_id,
+        a.frequency,
+        COUNT(*) AS txn_count,
+        SUM(CASE WHEN t.txn_type = 'Credit'
+            THEN f.amount ELSE 0 END) AS total_credit,
+        SUM(CASE WHEN t.txn_type = 'Debit'
+            THEN f.amount ELSE 0 END) AS total_debit,
+        SUM(f.signed_amount) AS net_cash_flow
+    FROM dim_account_location a
+    STRAIGHT_JOIN fact_transaction f
+        ON f.account_key = a.account_key
+    STRAIGHT_JOIN dim_date d
+        ON d.date_key = f.date_key
+    STRAIGHT_JOIN dim_transaction_type t
+        ON t.txn_type_key = f.txn_type_key
+    WHERE (%(year)s IS NULL OR d.year_num = %(year)s)
+      AND (%(region)s IS NULL OR a.region = %(region)s)
+    GROUP BY
+        a.region,
+        a.district_name,
+        a.account_id,
+        a.frequency
+), ranked AS (
+    SELECT
+        account_totals.*,
+        RANK() OVER (
+            PARTITION BY region
+            ORDER BY net_cash_flow DESC
+        ) AS rank_in_region
+    FROM account_totals
+)
+SELECT
+    region,
+    rank_in_region,
+    account_id,
+    district_name,
+    frequency,
+    txn_count,
+    total_credit,
+    total_debit,
+    net_cash_flow
+FROM ranked
+WHERE rank_in_region <= COALESCE(%(top_n)s, 5)
+ORDER BY
+    region,
+    rank_in_region,
+    account_id
+"""
+
+SQL_R6 = """
+WITH transaction_summary AS (
+    SELECT
+        f.txn_type_key,
+        COUNT(*) AS txn_count,
+        COUNT(f.amount) AS amount_count,
+        SUM(f.amount) AS total_amount
+    FROM fact_transaction f
+    JOIN dim_date d
+        ON d.date_key = f.date_key
+    WHERE (%(year)s IS NULL OR d.year_num = %(year)s)
+      AND (
+          %(region)s IS NULL
+          OR EXISTS (
+              SELECT 1
+              FROM dim_account_location a
+              WHERE a.account_key = f.account_key
+                AND a.region = %(region)s
+          )
+      )
+    GROUP BY f.txn_type_key
+)
+SELECT
+    CASE
+        WHEN GROUPING(t.txn_type) = 1 THEN 'ALL TYPES'
+        ELSE t.txn_type
+    END AS txn_type,
+    CASE
+        WHEN GROUPING(t.txn_type) = 1 THEN NULL
+        WHEN GROUPING(t.operation) = 1 THEN 'ALL OPERATIONS'
+        ELSE t.operation
+    END AS operation,
+    CASE
+        WHEN GROUPING(t.operation) = 1 THEN NULL
+        WHEN GROUPING(t.k_symbol) = 1 THEN 'ALL PURPOSES'
+        ELSE t.k_symbol
+    END AS purpose,
+    CASE
+        WHEN GROUPING(t.txn_type) = 1 THEN 'grand total'
+        WHEN GROUPING(t.operation) = 1 THEN 'type subtotal'
+        WHEN GROUPING(t.k_symbol) = 1 THEN 'operation subtotal'
+        ELSE 'detail'
+    END AS row_level,
+    SUM(s.txn_count) AS txn_count,
+    SUM(s.total_amount) AS total_amount,
+    ROUND(
+        SUM(s.total_amount) / NULLIF(SUM(s.amount_count), 0),
+        2
+    ) AS avg_amount
+FROM transaction_summary s
+JOIN dim_transaction_type t
+    ON t.txn_type_key = s.txn_type_key
+WHERE (%(txn_type)s IS NULL OR t.txn_type = %(txn_type)s)
+GROUP BY
+    t.txn_type,
+    t.operation,
+    t.k_symbol WITH ROLLUP
+ORDER BY
+    GROUPING(t.txn_type),
+    t.txn_type,
+    GROUPING(t.operation),
+    t.operation,
+    GROUPING(t.k_symbol),
+    t.k_symbol
+"""
+
+SQL_R7 = """
+WITH accts AS (
+    SELECT
+        a.region,
+        COUNT(*) AS account_count
+    FROM dim_account_location a
+    WHERE (%(region)s IS NULL OR a.region = %(region)s)
+    GROUP BY a.region
+),
+txn_by_account AS (
+    SELECT
+        f.account_key,
+        COUNT(*) AS txn_count,
+        SUM(f.signed_amount) AS net_cash_flow
+    FROM fact_transaction f
+    JOIN dim_date d
+        ON d.date_key = f.date_key
+    WHERE d.year_num BETWEEN
+          COALESCE(%(year_from)s, 1993)
+          AND COALESCE(%(year_to)s, 1998)
+    GROUP BY f.account_key
+),
+txn AS (
+    SELECT
+        a.region,
+        SUM(t.txn_count) AS txn_count,
+        SUM(t.net_cash_flow) AS net_cash_flow
+    FROM txn_by_account t
+    JOIN dim_account_location a
+        ON a.account_key = t.account_key
+    WHERE (%(region)s IS NULL OR a.region = %(region)s)
+    GROUP BY a.region
+),
+loans AS (
+    SELECT
+        a.region,
+        COUNT(*) AS loan_count,
+        SUM(l.loan_amount) AS loan_amount,
+        SUM(
+            CASE
+                WHEN s.payment_health = 'Bad' THEN 1
+                ELSE 0
+            END
+        ) AS problem_loans
+    FROM fact_loan l
+    JOIN dim_date d
+        ON d.date_key = l.grant_date_key
+    JOIN dim_account_location a
+        ON a.account_key = l.account_key
+    JOIN dim_loan_status s
+        ON s.loan_status_key = l.loan_status_key
+    WHERE d.year_num BETWEEN
+          COALESCE(%(year_from)s, 1993)
+          AND COALESCE(%(year_to)s, 1998)
+      AND (%(region)s IS NULL OR a.region = %(region)s)
+    GROUP BY a.region
+)
+SELECT
+    c.region,
+    c.account_count,
+    COALESCE(t.txn_count, 0) AS txn_count,
+    COALESCE(t.net_cash_flow, 0) AS net_cash_flow,
+    ROUND(
+        COALESCE(t.net_cash_flow, 0) / c.account_count,
+        2
+    ) AS net_cash_flow_per_account,
+    COALESCE(l.loan_count, 0) AS loans_granted,
+    COALESCE(l.loan_amount, 0) AS loan_amount,
+    COALESCE(l.problem_loans, 0) AS problem_loans,
+    ROUND(
+        100.0 * COALESCE(l.loan_count, 0)
+        / c.account_count,
+        2
+    ) AS loans_per_100_accounts
+
+FROM accts c
+LEFT JOIN txn t ON t.region = c.region
+LEFT JOIN loans l ON l.region = c.region
+ORDER BY c.region
+"""
+
 REPORTS = {name: dict(report) for name, report in _base.REPORTS.items()}
 REPORTS["R1_cash_flow_trend"]["sql"] = SQL_R1_OPT
 REPORTS["R2_regional_rollup"]["sql"] = SQL_R2_OPT
 REPORTS["R3_operation_by_year_pivot"]["sql"] = SQL_R3_OPT
 REPORTS["R4_loan_portfolio"]["sql"] = SQL_R4_OPT
+REPORTS["R5_top_accounts_by_region"]["sql"] = SQL_R5
+REPORTS["R6_transaction_mix"]["sql"] = SQL_R6
+REPORTS["R7_region_profile_drill_across"]["sql"] = SQL_R7
 REPORT_SQL = {name: report["sql"].strip() for name, report in REPORTS.items()}
 
 # the original main() reads these names from its own module, so point them at the optimized ones
