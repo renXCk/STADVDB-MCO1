@@ -1,0 +1,11 @@
+label: optimized_r7_fixed
+date: 2026-10-21 04:02:10
+python: 3.14.0
+os: Windows 10
+machine: AMD64
+cpu cores (logical): 8
+mysql version: 8.0.37
+innodb_buffer_pool_size (bytes): 134217728
+current database: mco1_schema
+
+Add by hand for the report: CPU model, RAM, disk type (SSD/HDD).

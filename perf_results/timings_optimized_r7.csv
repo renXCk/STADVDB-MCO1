@@ -1,0 +1,6 @@
+label,report,run,ms,rows,parameters,timestamp
+optimized_r7,R7_region_profile_drill_across,1,3425.93,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:52:58
+optimized_r7,R7_region_profile_drill_across,2,3456.91,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:52:58
+optimized_r7,R7_region_profile_drill_across,3,3384.05,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:52:58
+optimized_r7,R7_region_profile_drill_across,4,3405.30,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:52:58
+optimized_r7,R7_region_profile_drill_across,5,3343.19,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:52:58

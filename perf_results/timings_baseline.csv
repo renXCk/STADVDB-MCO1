@@ -1,0 +1,6 @@
+label,report,run,ms,rows,parameters,timestamp
+baseline,R5_top_accounts_by_region,1,1488.07,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 02:33:03
+baseline,R5_top_accounts_by_region,2,1492.36,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 02:33:03
+baseline,R5_top_accounts_by_region,3,1427.45,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 02:33:03
+baseline,R5_top_accounts_by_region,4,1393.26,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 02:33:03
+baseline,R5_top_accounts_by_region,5,1399.89,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 02:33:03

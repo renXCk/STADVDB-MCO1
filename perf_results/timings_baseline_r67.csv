@@ -1,0 +1,11 @@
+label,report,run,ms,rows,parameters,timestamp
+baseline_r67,R6_transaction_mix,1,2432.46,23,"{""year"": 1997}",2026-10-21 03:18:04
+baseline_r67,R6_transaction_mix,2,2345.63,23,"{""year"": 1997}",2026-10-21 03:18:04
+baseline_r67,R6_transaction_mix,3,2435.32,23,"{""year"": 1997}",2026-10-21 03:18:04
+baseline_r67,R6_transaction_mix,4,2412.61,23,"{""year"": 1997}",2026-10-21 03:18:04
+baseline_r67,R6_transaction_mix,5,2448.62,23,"{""year"": 1997}",2026-10-21 03:18:04
+baseline_r67,R7_region_profile_drill_across,1,3368.07,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:18:26
+baseline_r67,R7_region_profile_drill_across,2,3316.63,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:18:26
+baseline_r67,R7_region_profile_drill_across,3,3328.54,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:18:26
+baseline_r67,R7_region_profile_drill_across,4,3275.02,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:18:26
+baseline_r67,R7_region_profile_drill_across,5,3357.84,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 03:18:26

@@ -1,0 +1,6 @@
+label,report,run,ms,rows,parameters,timestamp
+optimized_r6,R6_transaction_mix,1,1001.89,23,"{""year"": 1997}",2026-10-21 03:43:53
+optimized_r6,R6_transaction_mix,2,954.62,23,"{""year"": 1997}",2026-10-21 03:43:53
+optimized_r6,R6_transaction_mix,3,859.44,23,"{""year"": 1997}",2026-10-21 03:43:53
+optimized_r6,R6_transaction_mix,4,848.18,23,"{""year"": 1997}",2026-10-21 03:43:53
+optimized_r6,R6_transaction_mix,5,844.59,23,"{""year"": 1997}",2026-10-21 03:43:53

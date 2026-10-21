@@ -1,0 +1,47 @@
+R6_transaction_mix  (label: baseline_r67, 2026-10-21 03:18:04)
+parameters: {"year": 1997}
+
+==============================================================================
+EXPLAIN (table form)
+==============================================================================
+id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra
+1 | SIMPLE | d |  | ALL | PRIMARY |  |  |  | 2191 | 10.0 | Using where; Using temporary; Using filesort
+1 | SIMPLE | f |  | ref | idx_ft_date,idx_ft_account,idx_ft_type | idx_ft_date | 4 | mco1_schema.d.date_key | 486 | 100.0 | 
+1 | SIMPLE | t |  | eq_ref | PRIMARY,uq_txn_type | PRIMARY | 4 | mco1_schema.f.txn_type_key | 1 | 100.0 | 
+1 | SIMPLE | a |  | eq_ref | PRIMARY | PRIMARY | 4 | mco1_schema.f.account_key | 1 | 100.0 | 
+
+==============================================================================
+EXPLAIN FORMAT=TREE
+==============================================================================
+-> Sort: grouping(rollup_group_item(t.txn_type,0)), t.txn_type, grouping(rollup_group_item(t.operation,1)), t.operation, grouping(rollup_group_item(t.k_symbol,2)), t.k_symbol
+    -> Stream results
+        -> Group aggregate with rollup: avg(fact_transaction.amount), count(0), sum(fact_transaction.amount)
+            -> Sort: t.txn_type, t.operation, t.k_symbol
+                -> Stream results  (cost=112049 rows=106503)
+                    -> Nested loop inner join  (cost=112049 rows=106503)
+                        -> Nested loop inner join  (cost=74773 rows=106503)
+                            -> Nested loop inner join  (cost=37497 rows=106503)
+                                -> Filter: (d.year_num = 1997)  (cost=221 rows=219)
+                                    -> Table scan on d  (cost=221 rows=2191)
+                                -> Index lookup on f using idx_ft_date (date_key=d.date_key)  (cost=122 rows=486)
+                            -> Single-row index lookup on t using PRIMARY (txn_type_key=f.txn_type_key)  (cost=0.25 rows=1)
+                        -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1)
+
+
+==============================================================================
+EXPLAIN ANALYZE (actually runs the query)
+==============================================================================
+-> Sort: `grouping(rollup_group_item(t.txn_type,0))`, txn_type, `grouping(rollup_group_item(t.operation,1))`, operation, `grouping(rollup_group_item(t.k_symbol,2))`, k_symbol  (actual time=2546..2546 rows=23 loops=1)
+    -> Stream results  (actual time=2230..2546 rows=23 loops=1)
+        -> Group aggregate with rollup: avg(fact_transaction.amount), count(0), sum(fact_transaction.amount)  (actual time=2230..2546 rows=23 loops=1)
+            -> Sort: txn_type, operation, k_symbol  (actual time=2220..2271 rows=284409 loops=1)
+                -> Stream results  (cost=112049 rows=106503) (actual time=0.867..1810 rows=284409 loops=1)
+                    -> Nested loop inner join  (cost=112049 rows=106503) (actual time=0.861..1286 rows=284409 loops=1)
+                        -> Nested loop inner join  (cost=74773 rows=106503) (actual time=0.858..994 rows=284409 loops=1)
+                            -> Nested loop inner join  (cost=37497 rows=106503) (actual time=0.853..799 rows=284409 loops=1)
+                                -> Filter: (d.year_num = 1997)  (cost=221 rows=219) (actual time=0.487..1.08 rows=365 loops=1)
+                                    -> Table scan on d  (cost=221 rows=2191) (actual time=0.0377..0.832 rows=2191 loops=1)
+                                -> Index lookup on f using idx_ft_date (date_key=d.date_key)  (cost=122 rows=486) (actual time=0.286..2.14 rows=779 loops=365)
+                            -> Single-row index lookup on t using PRIMARY (txn_type_key=f.txn_type_key)  (cost=0.25 rows=1) (actual time=548e-6..567e-6 rows=1 loops=284409)
+                        -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1) (actual time=895e-6..914e-6 rows=1 loops=284409)
+

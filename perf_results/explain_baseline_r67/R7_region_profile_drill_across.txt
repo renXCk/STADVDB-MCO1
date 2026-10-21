@@ -1,0 +1,86 @@
+R7_region_profile_drill_across  (label: baseline_r67, 2026-10-21 03:18:26)
+parameters: {"year_from": 1996, "year_to": 1998}
+
+==============================================================================
+EXPLAIN (table form)
+==============================================================================
+id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra
+1 | PRIMARY | <derived2> |  | ALL |  |  |  |  | 4676 | 100.0 | Using filesort
+1 | PRIMARY | <derived3> |  | ref | <auto_key0> | <auto_key0> | 202 | c.region | 25 | 100.0 | 
+1 | PRIMARY | <derived4> |  | ref | <auto_key0> | <auto_key0> | 202 | c.region | 7 | 100.0 | 
+4 | DERIVED | s |  | ALL | PRIMARY |  |  |  | 4 | 100.0 | Using temporary
+4 | DERIVED | l |  | ref | idx_fl_date,idx_fl_account,idx_fl_status | idx_fl_status | 4 | mco1_schema.s.loan_status_key | 170 | 100.0 | 
+4 | DERIVED | d |  | eq_ref | PRIMARY | PRIMARY | 4 | mco1_schema.l.grant_date_key | 1 | 11.11 | Using where
+4 | DERIVED | a |  | eq_ref | PRIMARY,idx_dim_account_location_region | PRIMARY | 4 | mco1_schema.l.account_key | 1 | 100.0 | 
+3 | DERIVED | d |  | ALL | PRIMARY |  |  |  | 2191 | 11.11 | Using where; Using temporary
+3 | DERIVED | f |  | ref | idx_ft_date,idx_ft_account | idx_ft_date | 4 | mco1_schema.d.date_key | 486 | 100.0 | 
+3 | DERIVED | a |  | eq_ref | PRIMARY,idx_dim_account_location_region | PRIMARY | 4 | mco1_schema.f.account_key | 1 | 100.0 | 
+2 | DERIVED | a |  | index | idx_dim_account_location_region | idx_dim_account_location_region | 202 |  | 4676 | 100.0 | Using index
+
+==============================================================================
+EXPLAIN FORMAT=TREE
+==============================================================================
+-> Nested loop left join  (cost=252386 rows=0)
+    -> Nested loop left join  (cost=30528 rows=0)
+        -> Sort: c.region  (cost=947..947 rows=8)
+            -> Table scan on c  (cost=942..944 rows=8)
+                -> Materialize CTE accts  (cost=942..942 rows=8)
+                    -> Group aggregate: count(0)  (cost=941 rows=8)
+                        -> Index scan on a using idx_dim_account_location_region  (cost=473 rows=4676)
+        -> Index lookup on t using <auto_key0> (region=c.region)  (cost=0.25..6.33 rows=25.3)
+            -> Materialize CTE txn  (cost=0..0 rows=0)
+                -> Table scan on <temporary>
+                    -> Aggregate using temporary table
+                        -> Nested loop inner join  (cost=83048 rows=118324)
+                            -> Nested loop inner join  (cost=41635 rows=118324)
+                                -> Filter: (d.year_num between <cache>(coalesce(1996,1993)) and <cache>(coalesce(1998,1998)))  (cost=221 rows=243)
+                                    -> Table scan on d  (cost=221 rows=2191)
+                                -> Index lookup on f using idx_ft_date (date_key=d.date_key)  (cost=122 rows=486)
+                            -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1)
+    -> Index lookup on l using <auto_key0> (region=c.region)  (cost=0.25..1.88 rows=7.5)
+        -> Materialize CTE loans  (cost=0..0 rows=0)
+            -> Table scan on <temporary>
+                -> Aggregate using temporary table
+                    -> Nested loop inner join  (cost=346 rows=75.8)
+                        -> Nested loop inner join  (cost=320 rows=75.8)
+                            -> Nested loop inner join  (cost=80.9 rows=682)
+                                -> Table scan on s  (cost=0.65 rows=4)
+                                -> Index lookup on l using idx_fl_status (loan_status_key=s.loan_status_key)  (cost=7.26 rows=170)
+                            -> Filter: (d.year_num between <cache>(coalesce(1996,1993)) and <cache>(coalesce(1998,1998)))  (cost=0.25 rows=0.111)
+                                -> Single-row index lookup on d using PRIMARY (date_key=l.grant_date_key)  (cost=0.25 rows=1)
+                        -> Single-row index lookup on a using PRIMARY (account_key=l.account_key)  (cost=0.251 rows=1)
+
+
+==============================================================================
+EXPLAIN ANALYZE (actually runs the query)
+==============================================================================
+-> Nested loop left join  (cost=252386 rows=0) (actual time=3657..3657 rows=8 loops=1)
+    -> Nested loop left join  (cost=30528 rows=0) (actual time=3654..3654 rows=8 loops=1)
+        -> Sort: c.region  (cost=947..947 rows=8) (actual time=5.55..5.55 rows=8 loops=1)
+            -> Table scan on c  (cost=942..944 rows=8) (actual time=5.49..5.49 rows=8 loops=1)
+                -> Materialize CTE accts  (cost=942..942 rows=8) (actual time=5.48..5.48 rows=8 loops=1)
+                    -> Group aggregate: count(0)  (cost=941 rows=8) (actual time=0.632..5.43 rows=8 loops=1)
+                        -> Covering index scan on a using idx_dim_account_location_region  (cost=473 rows=4676) (actual time=0.0639..3.14 rows=4500 loops=1)
+        -> Index lookup on t using <auto_key0> (region=c.region)  (cost=0.25..6.33 rows=25.3) (actual time=456..456 rows=1 loops=8)
+            -> Materialize CTE txn  (cost=0..0 rows=0) (actual time=3649..3649 rows=8 loops=1)
+                -> Table scan on <temporary>  (actual time=3649..3649 rows=8 loops=1)
+                    -> Aggregate using temporary table  (actual time=3649..3649 rows=8 loops=1)
+                        -> Nested loop inner join  (cost=83048 rows=118324) (actual time=1.41..2997 rows=803465 loops=1)
+                            -> Nested loop inner join  (cost=41635 rows=118324) (actual time=1.4..2156 rows=803465 loops=1)
+                                -> Filter: (d.year_num between <cache>(coalesce(1996,1993)) and <cache>(coalesce(1998,1998)))  (cost=221 rows=243) (actual time=0.797..2.08 rows=1096 loops=1)
+                                    -> Table scan on d  (cost=221 rows=2191) (actual time=0.0575..1.44 rows=2191 loops=1)
+                                -> Index lookup on f using idx_ft_date (date_key=d.date_key)  (cost=122 rows=486) (actual time=0.274..1.93 rows=733 loops=1096)
+                            -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1) (actual time=915e-6..935e-6 rows=1 loops=803465)
+    -> Index lookup on l using <auto_key0> (region=c.region)  (cost=0.25..1.88 rows=7.5) (actual time=0.373..0.373 rows=1 loops=8)
+        -> Materialize CTE loans  (cost=0..0 rows=0) (actual time=2.98..2.98 rows=8 loops=1)
+            -> Table scan on <temporary>  (actual time=2.95..2.95 rows=8 loops=1)
+                -> Aggregate using temporary table  (actual time=2.95..2.95 rows=8 loops=1)
+                    -> Nested loop inner join  (cost=346 rows=75.8) (actual time=0.149..2.36 rows=471 loops=1)
+                        -> Nested loop inner join  (cost=320 rows=75.8) (actual time=0.146..1.84 rows=471 loops=1)
+                            -> Nested loop inner join  (cost=80.9 rows=682) (actual time=0.137..0.901 rows=682 loops=1)
+                                -> Table scan on s  (cost=0.65 rows=4) (actual time=0.0092..0.0114 rows=4 loops=1)
+                                -> Index lookup on l using idx_fl_status (loan_status_key=s.loan_status_key)  (cost=7.26 rows=170) (actual time=0.0798..0.215 rows=170 loops=4)
+                            -> Filter: (d.year_num between <cache>(coalesce(1996,1993)) and <cache>(coalesce(1998,1998)))  (cost=0.25 rows=0.111) (actual time=0.00124..0.00128 rows=0.691 loops=682)
+                                -> Single-row index lookup on d using PRIMARY (date_key=l.grant_date_key)  (cost=0.25 rows=1) (actual time=0.00106..0.00108 rows=1 loops=682)
+                        -> Single-row index lookup on a using PRIMARY (account_key=l.account_key)  (cost=0.251 rows=1) (actual time=942e-6..963e-6 rows=1 loops=471)
+
