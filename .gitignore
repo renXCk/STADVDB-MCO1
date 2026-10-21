@@ -6,3 +6,5 @@ etl_rejects.log
 etl_run.log
 functional_test_log.csv
 MCO1 - Dataset financedataclean.sql
+.env.cloud
+*.pem

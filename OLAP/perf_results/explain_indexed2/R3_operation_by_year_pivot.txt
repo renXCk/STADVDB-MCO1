@@ -1,0 +1,41 @@
+R3_operation_by_year_pivot  (label: indexed2, 2026-10-21 17:05:56)
+parameters: {"measure": "amount", "txn_type": "Debit"}
+
+==============================================================================
+EXPLAIN (table form)
+==============================================================================
+id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra
+1 | SIMPLE | t |  | ref | PRIMARY,uq_txn_type | uq_txn_type | 82 | const | 10 | 100.0 | Using index; Using temporary; Using filesort
+1 | SIMPLE | f |  | ref | idx_ft_date,idx_ft_account,idx_ft_type,idx_ft_date_cover,idx_ft_type_cover | idx_ft_type_cover | 4 | mco1_schema.t.txn_type_key | 80952 | 100.0 | Using index
+1 | SIMPLE | d |  | eq_ref | PRIMARY | PRIMARY | 4 | mco1_schema.f.date_key | 1 | 100.0 | 
+1 | SIMPLE | a |  | eq_ref | PRIMARY | PRIMARY | 4 | mco1_schema.f.account_key | 1 | 100.0 | 
+
+==============================================================================
+EXPLAIN FORMAT=TREE
+==============================================================================
+-> Sort: grouping(rollup_group_item(t.operation,0)), operation
+    -> Stream results  (cost=731056 rows=901)
+        -> Group aggregate with rollup: sum((case when (d.year_num = 1993) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1994) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1995) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1996) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1997) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1998) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when ('amount' = 'count') then 1 else f.amount end))  (cost=731056 rows=901)
+            -> Nested loop inner join  (cost=650103 rows=809529)
+                -> Nested loop inner join  (cost=366768 rows=809529)
+                    -> Nested loop inner join  (cost=83432 rows=809529)
+                        -> Covering index lookup on t using uq_txn_type (txn_type='Debit')  (cost=1.38 rows=10)
+                        -> Covering index lookup on f using idx_ft_type_cover (txn_type_key=t.txn_type_key)  (cost=1057 rows=80953)
+                    -> Single-row index lookup on d using PRIMARY (date_key=f.date_key)  (cost=0.25 rows=1)
+                -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1)
+
+
+==============================================================================
+EXPLAIN ANALYZE (actually runs the query)
+==============================================================================
+-> Sort: `grouping(rollup_group_item(t.operation,0))`, operation  (actual time=4016..4016 rows=4 loops=1)
+    -> Stream results  (cost=731056 rows=901) (actual time=61..4016 rows=4 loops=1)
+        -> Group aggregate with rollup: sum((case when (d.year_num = 1993) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1994) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1995) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1996) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1997) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when (d.year_num = 1998) then (case when ('amount' = 'count') then 1 else f.amount end) else 0 end)), sum((case when ('amount' = 'count') then 1 else f.amount end))  (cost=731056 rows=901) (actual time=61..4016 rows=4 loops=1)
+            -> Nested loop inner join  (cost=650103 rows=809529) (actual time=0.773..2127 rows=651237 loops=1)
+                -> Nested loop inner join  (cost=366768 rows=809529) (actual time=0.769..872 rows=651237 loops=1)
+                    -> Nested loop inner join  (cost=83432 rows=809529) (actual time=0.761..497 rows=651237 loops=1)
+                        -> Covering index lookup on t using uq_txn_type (txn_type='Debit')  (cost=1.38 rows=10) (actual time=0.0161..0.0366 rows=10 loops=1)
+                        -> Covering index lookup on f using idx_ft_type_cover (txn_type_key=t.txn_type_key)  (cost=1057 rows=80953) (actual time=1.31..42.5 rows=65124 loops=10)
+                    -> Single-row index lookup on d using PRIMARY (date_key=f.date_key)  (cost=0.25 rows=1) (actual time=249e-6..298e-6 rows=1 loops=651237)
+                -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1) (actual time=0.00159..0.00164 rows=1 loops=651237)
+

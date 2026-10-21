@@ -1,0 +1,90 @@
+R1_cash_flow_trend  (label: rewrite_only, 2026-10-21 17:00:42)
+parameters: {"level": "month", "date_from": "1997-01-01", "date_to": "1997-12-31"}
+
+==============================================================================
+EXPLAIN (table form)
+==============================================================================
+id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra
+1 | PRIMARY | <derived2> |  | ALL |  |  |  |  | 94933 | 100.0 | Using filesort
+2 | DERIVED | t |  | index | PRIMARY | uq_txn_type | 486 |  | 14 | 100.0 | Using index; Using temporary
+2 | DERIVED | <derived3> |  | ref | <auto_key2> | <auto_key2> | 4 | mco1_schema.t.txn_type_key | 6780 | 100.0 | 
+2 | DERIVED | d |  | eq_ref | PRIMARY | PRIMARY | 4 | x.date_key | 1 | 100.0 | 
+3 | DERIVED | f |  | ALL | idx_ft_date |  |  |  | 1052388 | 42.96 | Using where; Using temporary
+5 | SUBQUERY | dim_date |  | range | uq_dim_date_full_date | uq_dim_date_full_date | 3 |  | 1826 | 100.0 | Using where; Using index
+4 | SUBQUERY | dim_date |  | range | uq_dim_date_full_date | uq_dim_date_full_date | 3 |  | 730 | 100.0 | Using where; Using index
+
+==============================================================================
+EXPLAIN FORMAT=TREE
+==============================================================================
+-> Sort: period_totals.period_start
+    -> Table scan on <temporary>  (cost=2.5..2.5 rows=0)
+        -> Temporary table  (cost=0..0 rows=0)
+            -> Window aggregate with buffering: lag(period_totals.net_cash_flow) OVER (ORDER BY period_totals.period_start ) 
+                -> Table scan on <temporary>  (cost=2.5..2.5 rows=0)
+                    -> Temporary table  (cost=0..0 rows=0)
+                        -> Window aggregate with buffering: lag(period_totals.net_cash_flow) OVER (ORDER BY period_totals.period_start ) 
+                            -> Table scan on <temporary>  (cost=2.5..2.5 rows=0)
+                                -> Temporary table  (cost=0..0 rows=0)
+                                    -> Window aggregate with buffering: sum(period_totals.net_cash_flow) OVER (ORDER BY period_totals.period_start ) 
+                                        -> Sort: period_totals.period_start  (cost=2.6..2.6 rows=0)
+                                            -> Table scan on period_totals  (cost=2.5..2.5 rows=0)
+                                                -> Materialize CTE period_totals  (cost=0..0 rows=0)
+                                                    -> Table scan on <temporary>
+                                                        -> Aggregate using temporary table
+                                                            -> Nested loop inner join  (cost=47469 rows=0)
+                                                                -> Nested loop inner join  (cost=23736 rows=0)
+                                                                    -> Index scan on t using uq_txn_type  (cost=2.4 rows=14)
+                                                                    -> Index lookup on x using <auto_key2> (txn_type_key=t.txn_type_key)  (cost=0.257..1744 rows=6781)
+                                                                        -> Materialize CTE daily  (cost=0..0 rows=0)
+                                                                            -> Table scan on <temporary>
+                                                                                -> Aggregate using temporary table
+                                                                                    -> Filter: (f.date_key between (select #4) and (select #5))  (cost=106320 rows=452064)
+                                                                                        -> Table scan on f  (cost=106320 rows=1.05e+6)
+                                                                                        -> Select #4 (subquery in condition; run only once)
+                                                                                            -> Aggregate: min(dim_date.date_key)  (cost=219 rows=1)
+                                                                                                -> Filter: (dim_date.full_date >= <cache>(coalesce('1997-01-01','1993-01-01')))  (cost=146 rows=730)
+                                                                                                    -> Covering index range scan on dim_date using uq_dim_date_full_date over ('1997-01-01' <= full_date)  (cost=146 rows=730)
+                                                                                        -> Select #5 (subquery in condition; run only once)
+                                                                                            -> Aggregate: max(dim_date.date_key)  (cost=548 rows=1)
+                                                                                                -> Filter: (dim_date.full_date <= <cache>(coalesce('1997-12-31','1998-12-31')))  (cost=366 rows=1826)
+                                                                                                    -> Covering index range scan on dim_date using uq_dim_date_full_date over (full_date <= '1997-12-31')  (cost=366 rows=1826)
+                                                                -> Single-row index lookup on d using PRIMARY (date_key=x.date_key)  (cost=0.25 rows=1)
+
+
+==============================================================================
+EXPLAIN ANALYZE (actually runs the query)
+==============================================================================
+-> Sort: period_totals.period_start  (actual time=1310..1310 rows=12 loops=1)
+    -> Table scan on <temporary>  (cost=2.5..2.5 rows=0) (actual time=1310..1310 rows=12 loops=1)
+        -> Temporary table  (cost=0..0 rows=0) (actual time=1310..1310 rows=12 loops=1)
+            -> Window aggregate with buffering: lag(period_totals.net_cash_flow) OVER (ORDER BY period_totals.period_start )   (actual time=1310..1310 rows=12 loops=1)
+                -> Table scan on <temporary>  (cost=2.5..2.5 rows=0) (actual time=1310..1310 rows=12 loops=1)
+                    -> Temporary table  (cost=0..0 rows=0) (actual time=1310..1310 rows=12 loops=1)
+                        -> Window aggregate with buffering: lag(period_totals.net_cash_flow) OVER (ORDER BY period_totals.period_start )   (actual time=1309..1309 rows=12 loops=1)
+                            -> Table scan on <temporary>  (cost=2.5..2.5 rows=0) (actual time=1309..1309 rows=12 loops=1)
+                                -> Temporary table  (cost=0..0 rows=0) (actual time=1309..1309 rows=12 loops=1)
+                                    -> Window aggregate with buffering: sum(period_totals.net_cash_flow) OVER (ORDER BY period_totals.period_start )   (actual time=1309..1309 rows=12 loops=1)
+                                        -> Sort: period_totals.period_start  (cost=2.6..2.6 rows=0) (actual time=1309..1309 rows=12 loops=1)
+                                            -> Table scan on period_totals  (cost=2.5..2.5 rows=0) (actual time=1309..1309 rows=12 loops=1)
+                                                -> Materialize CTE period_totals  (cost=0..0 rows=0) (actual time=1309..1309 rows=12 loops=1)
+                                                    -> Table scan on <temporary>  (actual time=1309..1309 rows=12 loops=1)
+                                                        -> Aggregate using temporary table  (actual time=1309..1309 rows=12 loops=1)
+                                                            -> Nested loop inner join  (cost=47469 rows=0) (actual time=1294..1302 rows=2027 loops=1)
+                                                                -> Nested loop inner join  (cost=23736 rows=0) (actual time=1294..1296 rows=2027 loops=1)
+                                                                    -> Covering index scan on t using uq_txn_type  (cost=2.4 rows=14) (actual time=0.0234..0.0618 rows=14 loops=1)
+                                                                    -> Index lookup on x using <auto_key2> (txn_type_key=t.txn_type_key)  (cost=0.257..1744 rows=6781) (actual time=92.5..92.5 rows=145 loops=14)
+                                                                        -> Materialize CTE daily  (cost=0..0 rows=0) (actual time=1294..1294 rows=2027 loops=1)
+                                                                            -> Table scan on <temporary>  (actual time=1290..1290 rows=2027 loops=1)
+                                                                                -> Aggregate using temporary table  (actual time=1290..1290 rows=2027 loops=1)
+                                                                                    -> Filter: (f.date_key between (select #4) and (select #5))  (cost=106320 rows=452064) (actual time=1.48..894 rows=284409 loops=1)
+                                                                                        -> Table scan on f  (cost=106320 rows=1.05e+6) (actual time=1.46..653 rows=1.06e+6 loops=1)
+                                                                                        -> Select #4 (subquery in condition; run only once)
+                                                                                            -> Aggregate: min(dim_date.date_key)  (cost=219 rows=1) (actual time=0.339..0.339 rows=1 loops=1)
+                                                                                                -> Filter: (dim_date.full_date >= <cache>(coalesce('1997-01-01','1993-01-01')))  (cost=146 rows=730) (actual time=0.0865..0.289 rows=730 loops=1)
+                                                                                                    -> Covering index range scan on dim_date using uq_dim_date_full_date over ('1997-01-01' <= full_date)  (cost=146 rows=730) (actual time=0.0844..0.206 rows=730 loops=1)
+                                                                                        -> Select #5 (subquery in condition; run only once)
+                                                                                            -> Aggregate: max(dim_date.date_key)  (cost=548 rows=1) (actual time=1.66..1.66 rows=1 loops=1)
+                                                                                                -> Filter: (dim_date.full_date <= <cache>(coalesce('1997-12-31','1998-12-31')))  (cost=366 rows=1826) (actual time=0.0872..1.39 rows=1826 loops=1)
+                                                                                                    -> Covering index range scan on dim_date using uq_dim_date_full_date over (full_date <= '1997-12-31')  (cost=366 rows=1826) (actual time=0.0866..1 rows=1826 loops=1)
+                                                                -> Single-row index lookup on d using PRIMARY (date_key=x.date_key)  (cost=0.25 rows=1) (actual time=0.00257..0.00262 rows=1 loops=2027)
+

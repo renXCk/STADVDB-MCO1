@@ -1,0 +1,71 @@
+label,report,run,ms,rows,parameters,timestamp
+indexed,R1_cash_flow_trend,1,3315.09,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,2,3284.76,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,3,3516.51,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,4,3341.49,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,5,3281.13,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,6,3467.21,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,7,3515.21,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,8,3465.73,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,9,3510.89,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R1_cash_flow_trend,10,3189.75,12,"{""level"": ""month"", ""date_from"": ""1997-01-01"", ""date_to"": ""1997-12-31""}",2026-10-21 15:03:58
+indexed,R2_regional_rollup,1,7285.43,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,2,7265.80,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,3,7195.30,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,4,7222.49,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,5,6971.28,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,6,7183.12,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,7,7103.76,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,8,6975.68,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,9,7148.88,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R2_regional_rollup,10,7115.13,85,"{""year_from"": 1996, ""year_to"": 1998, ""txn_type"": ""Credit""}",2026-10-21 15:05:19
+indexed,R3_operation_by_year_pivot,1,7609.98,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,2,7644.66,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,3,7741.41,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,4,7317.95,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,5,7590.23,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,6,7622.23,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,7,7669.76,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,8,8172.89,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,9,8262.67,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R3_operation_by_year_pivot,10,8189.90,4,"{""measure"": ""amount"", ""txn_type"": ""Debit""}",2026-10-21 15:06:50
+indexed,R4_loan_portfolio,1,7.73,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,2,15.17,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,3,5.11,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,4,8.71,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,5,13.79,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,6,8.85,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,7,36.60,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,8,27.19,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,9,21.86,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R4_loan_portfolio,10,22.74,8,"{""group_by"": ""region""}",2026-10-21 15:06:59
+indexed,R5_top_accounts_by_region,1,2272.68,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,2,2272.51,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,3,2278.78,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,4,2285.11,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,5,2240.01,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,6,2226.91,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,7,2403.12,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,8,2286.42,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,9,2252.50,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R5_top_accounts_by_region,10,2258.23,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-21 15:07:24
+indexed,R6_transaction_mix,1,6910.90,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,2,6602.37,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,3,6757.09,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,4,6499.42,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,5,6785.76,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,6,6589.97,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,7,6693.32,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,8,6606.81,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,9,6672.07,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R6_transaction_mix,10,6541.77,23,"{""year"": 1997}",2026-10-21 15:08:40
+indexed,R7_region_profile_drill_across,1,7091.18,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,2,7120.59,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,3,7075.97,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,4,7107.30,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,5,7000.41,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,6,6856.09,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,7,6875.72,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,8,6779.39,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,9,6592.61,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03
+indexed,R7_region_profile_drill_across,10,6941.06,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-21 15:10:03

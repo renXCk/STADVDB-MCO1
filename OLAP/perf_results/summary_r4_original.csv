@@ -1,0 +1,2 @@
+report,runs,min_ms,median_ms,mean_ms,max_ms,rows,status
+R4_loan_portfolio,50,4.29,5.74,6.77,19.08,8,ok

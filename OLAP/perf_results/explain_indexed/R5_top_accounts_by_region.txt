@@ -1,0 +1,61 @@
+R5_top_accounts_by_region  (label: indexed, 2026-10-21 15:07:24)
+parameters: {"region": "Prague", "year": 1998, "top_n": 5}
+
+==============================================================================
+EXPLAIN (table form)
+==============================================================================
+id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra
+1 | PRIMARY | <derived2> |  | ALL |  |  |  |  | 15839 | 33.33 | Using where; Using filesort
+2 | DERIVED | <derived3> |  | ALL |  |  |  |  | 15839 | 100.0 | Using filesort
+3 | DERIVED | d |  | ALL | PRIMARY |  |  |  | 2191 | 10.0 | Using where; Using temporary
+3 | DERIVED | f |  | ref | idx_ft_date,idx_ft_account,idx_ft_type,idx_ft_date_cover,idx_ft_type_cover | idx_ft_date_cover | 4 | mco1_schema.d.date_key | 582 | 100.0 | Using index
+3 | DERIVED | t |  | eq_ref | PRIMARY | PRIMARY | 4 | mco1_schema.f.txn_type_key | 1 | 100.0 | 
+3 | DERIVED | a |  | eq_ref | PRIMARY,idx_dim_account_location_region | PRIMARY | 4 | mco1_schema.f.account_key | 1 | 12.41 | Using where
+
+==============================================================================
+EXPLAIN FORMAT=TREE
+==============================================================================
+-> Sort: ranked.region, ranked.rank_in_region, ranked.account_id  (cost=2.6..2.6 rows=0)
+    -> Filter: (ranked.rank_in_region <= 5)  (cost=2.5..2.5 rows=0)
+        -> Table scan on ranked  (cost=2.5..2.5 rows=0)
+            -> Materialize CTE ranked  (cost=0..0 rows=0)
+                -> Window aggregate: rank() OVER (PARTITION BY account_totals.region ORDER BY account_totals.net_cash_flow desc ) 
+                    -> Sort: account_totals.region, account_totals.net_cash_flow DESC  (cost=2.6..2.6 rows=0)
+                        -> Table scan on account_totals  (cost=2.5..2.5 rows=0)
+                            -> Materialize CTE account_totals  (cost=0..0 rows=0)
+                                -> Table scan on <temporary>
+                                    -> Aggregate using temporary table
+                                        -> Nested loop inner join  (cost=103051 rows=15840)
+                                            -> Nested loop inner join  (cost=58390 rows=127603)
+                                                -> Nested loop inner join  (cost=13729 rows=127603)
+                                                    -> Filter: (d.year_num = 1998)  (cost=221 rows=219)
+                                                        -> Table scan on d  (cost=221 rows=2191)
+                                                    -> Covering index lookup on f using idx_ft_date_cover (date_key=d.date_key)  (cost=3.68 rows=582)
+                                                -> Single-row index lookup on t using PRIMARY (txn_type_key=f.txn_type_key)  (cost=0.25 rows=1)
+                                            -> Filter: (a.region = 'Prague')  (cost=0.25 rows=0.124)
+                                                -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1)
+
+
+==============================================================================
+EXPLAIN ANALYZE (actually runs the query)
+==============================================================================
+-> Sort: ranked.region, ranked.rank_in_region, ranked.account_id  (cost=2.6..2.6 rows=0) (actual time=2807..2807 rows=5 loops=1)
+    -> Filter: (ranked.rank_in_region <= 5)  (cost=2.5..2.5 rows=0) (actual time=2807..2807 rows=5 loops=1)
+        -> Table scan on ranked  (cost=2.5..2.5 rows=0) (actual time=2807..2807 rows=554 loops=1)
+            -> Materialize CTE ranked  (cost=0..0 rows=0) (actual time=2807..2807 rows=554 loops=1)
+                -> Window aggregate: rank() OVER (PARTITION BY account_totals.region ORDER BY account_totals.net_cash_flow desc )   (actual time=2804..2806 rows=554 loops=1)
+                    -> Sort: account_totals.region, account_totals.net_cash_flow DESC  (cost=2.6..2.6 rows=0) (actual time=2804..2804 rows=554 loops=1)
+                        -> Table scan on account_totals  (cost=2.5..2.5 rows=0) (actual time=2803..2803 rows=554 loops=1)
+                            -> Materialize CTE account_totals  (cost=0..0 rows=0) (actual time=2803..2803 rows=554 loops=1)
+                                -> Table scan on <temporary>  (actual time=2801..2802 rows=554 loops=1)
+                                    -> Aggregate using temporary table  (actual time=2801..2801 rows=554 loops=1)
+                                        -> Nested loop inner join  (cost=103051 rows=15840) (actual time=0.749..2436 rows=40178 loops=1)
+                                            -> Nested loop inner join  (cost=58390 rows=127603) (actual time=0.707..784 rows=322277 loops=1)
+                                                -> Nested loop inner join  (cost=13729 rows=127603) (actual time=0.698..432 rows=322277 loops=1)
+                                                    -> Filter: (d.year_num = 1998)  (cost=221 rows=219) (actual time=0.65..2.03 rows=365 loops=1)
+                                                        -> Table scan on d  (cost=221 rows=2191) (actual time=0.0854..1.39 rows=2191 loops=1)
+                                                    -> Covering index lookup on f using idx_ft_date_cover (date_key=d.date_key)  (cost=3.68 rows=582) (actual time=0.0892..1.03 rows=883 loops=365)
+                                                -> Single-row index lookup on t using PRIMARY (txn_type_key=f.txn_type_key)  (cost=0.25 rows=1) (actual time=544e-6..617e-6 rows=1 loops=322277)
+                                            -> Filter: (a.region = 'Prague')  (cost=0.25 rows=0.124) (actual time=0.00474..0.00478 rows=0.125 loops=322277)
+                                                -> Single-row index lookup on a using PRIMARY (account_key=f.account_key)  (cost=0.25 rows=1) (actual time=0.00376..0.00383 rows=1 loops=322277)
+

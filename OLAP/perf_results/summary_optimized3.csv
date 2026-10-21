@@ -1,0 +1,3 @@
+report,runs,min_ms,median_ms,mean_ms,max_ms,rows,status
+R2_regional_rollup,10,535.18,565.19,578.00,712.30,85,ok
+R3_operation_by_year_pivot,10,894.96,900.90,907.90,942.51,4,ok

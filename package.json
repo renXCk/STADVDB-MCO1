@@ -1,13 +1,14 @@
 {
-  "name": "berka-olap-dashboard",
+  "name": "group5-mco1-olap-dashboard",
   "version": "0.1.0",
   "private": true,
-  "description": "OLAP dashboard over the Berka bank data warehouse (MySQL)",
+  "description": "Group 5 MCO1 OLAP Dashboard over the bank data warehouse (MySQL)",
   "dependencies": {
     "mysql2": "^3.11.0"
   },
   "scripts": {
-    "start": "node --env-file-if-exists=.env.local server.js"
+    "start": "node --env-file-if-exists=.env.local server.js",
+    "check": "node scripts/check-endpoints.js"
   },
   "engines": {
     "node": ">=22"
