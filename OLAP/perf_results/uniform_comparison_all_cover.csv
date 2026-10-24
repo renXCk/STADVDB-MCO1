@@ -1,0 +1,8 @@
+report,runs_before,runs_after,median_before_ms,median_after_ms,time_saved_ms,speedup_x,improvement_pct,row_count
+R1_cash_flow_trend,10,10,3365.6,301.1,3064.5,11.18,91.05,same
+R2_regional_rollup,10,10,9795.1,705.1,9090.0,13.89,92.80,same
+R3_operation_by_year_pivot,10,10,7195.8,1033.1,6162.7,6.97,85.64,same
+R4_loan_portfolio,10,10,7.8,5.8,1.9,1.33,24.94,same
+R5_top_accounts_by_region,10,10,1221.6,1094.5,127.1,1.12,10.41,same
+R6_transaction_mix,10,10,4878.3,350.4,4527.9,13.92,92.82,same
+R7_region_profile_drill_across,10,10,7804.6,1123.7,6680.8,6.95,85.60,same

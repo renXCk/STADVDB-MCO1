@@ -1,0 +1,8 @@
+report,runs,min_ms,median_ms,mean_ms,max_ms,rows,status
+R1_cash_flow_trend,10,3024.17,3365.55,3597.62,5961.04,12,ok
+R2_regional_rollup,10,8986.62,9795.14,9881.90,11905.33,85,ok
+R3_operation_by_year_pivot,10,6578.08,7195.78,7096.29,7580.38,4,ok
+R4_loan_portfolio,10,6.09,7.78,8.32,11.39,8,ok
+R5_top_accounts_by_region,10,1034.55,1221.63,1201.25,1298.81,5,ok
+R6_transaction_mix,10,4683.62,4878.29,4995.88,5478.86,23,ok
+R7_region_profile_drill_across,10,7332.19,7804.57,7838.41,8668.82,8,ok

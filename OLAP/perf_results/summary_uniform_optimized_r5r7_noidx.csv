@@ -1,0 +1,4 @@
+report,runs,min_ms,median_ms,mean_ms,max_ms,rows,status
+R5_top_accounts_by_region,10,888.32,1061.61,1037.66,1172.26,5,ok
+R6_transaction_mix,10,1652.46,2019.13,2019.66,2335.45,23,ok
+R7_region_profile_drill_across,10,4602.38,6099.33,5961.87,6593.03,8,ok

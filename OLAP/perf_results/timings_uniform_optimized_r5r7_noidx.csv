@@ -1,0 +1,31 @@
+label,report,run,ms,rows,parameters,timestamp
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,1,1172.26,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,2,919.86,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,3,1106.85,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,4,1071.22,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,5,1105.48,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,6,1105.76,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,7,979.25,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,8,975.62,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,9,1052.00,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R5_top_accounts_by_region,10,888.32,5,"{""region"": ""Prague"", ""year"": 1998, ""top_n"": 5}",2026-10-24 21:25:47
+uniform_optimized_r5r7_noidx,R6_transaction_mix,1,2144.38,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,2,2131.75,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,3,1906.50,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,4,1889.46,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,5,1652.46,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,6,1812.72,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,7,2215.10,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,8,2335.45,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,9,1902.25,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R6_transaction_mix,10,2206.47,23,"{""year"": 1997}",2026-10-24 21:26:14
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,1,6593.03,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,2,6078.98,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,3,6216.09,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,4,5825.97,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,5,6031.92,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,6,5582.76,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,7,6119.68,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,8,4602.38,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,9,6404.61,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
+uniform_optimized_r5r7_noidx,R7_region_profile_drill_across,10,6163.25,8,"{""year_from"": 1996, ""year_to"": 1998}",2026-10-24 21:27:22
